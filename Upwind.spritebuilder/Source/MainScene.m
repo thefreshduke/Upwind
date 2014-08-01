@@ -67,7 +67,7 @@
              
              
 - (BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair playerCollision:(CCNode *)player wallCollision:(CCNode *)wall {
-    return NO;
+    return YES;
 }
              
 @end
