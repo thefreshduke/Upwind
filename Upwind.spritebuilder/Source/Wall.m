@@ -10,4 +10,10 @@
 
 @implementation Wall
 
+- (void)didLoadFromCCB
+{
+    self.position = ccp(545, 30);
+    self.physicsBody.collisionType = @"wallCollision";
+}
+
 @end

@@ -85,8 +85,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.0</real>
-							<real>0.0</real>
+							<real>0.5</real>
+							<real>0.5</real>
 						</array>
 					</dict>
 					<dict>
@@ -150,13 +150,13 @@
 			<key>collisionMask</key>
 			<array/>
 			<key>collisionType</key>
-			<string>wallCollision</string>
+			<string></string>
 			<key>cornerRadius</key>
 			<real>0.0</real>
 			<key>density</key>
 			<real>1</real>
 			<key>dynamic</key>
-			<false/>
+			<true/>
 			<key>elasticity</key>
 			<real>0.30000001192092896</real>
 			<key>friction</key>
@@ -168,32 +168,32 @@
 					<real>0.0</real>
 				</array>
 				<array>
-					<real>-0.07444397360086441</real>
-					<real>113.48921203613281</real>
+					<real>0.0</real>
+					<real>32</real>
 				</array>
 				<array>
-					<real>22.837783813476562</real>
-					<real>113.46329498291016</real>
+					<real>32</real>
+					<real>32</real>
 				</array>
 				<array>
-					<real>22.862110137939453</real>
-					<real>-0.17015625536441803</real>
+					<real>32</real>
+					<real>0.0</real>
 				</array>
 			</array>
 			<key>polygons</key>
 			<array>
 				<array>
 					<array>
-						<real>22.862110137939453</real>
-						<real>-0.17015625536441803</real>
+						<real>32</real>
+						<real>0.0</real>
 					</array>
 					<array>
-						<real>22.837783813476562</real>
-						<real>113.46329498291016</real>
+						<real>32</real>
+						<real>32</real>
 					</array>
 					<array>
-						<real>-0.07444397360086441</real>
-						<real>113.48921203613281</real>
+						<real>0.0</real>
+						<real>32</real>
 					</array>
 					<array>
 						<real>0.0</real>

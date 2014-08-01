@@ -80,9 +80,9 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>20</real>
+									<real>545</real>
 									<real>30</real>
-									<integer>3</integer>
+									<integer>0</integer>
 									<integer>0</integer>
 									<integer>0</integer>
 								</array>
@@ -109,6 +109,8 @@
 								<string>Wall.ccb</string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>UUID</key>
