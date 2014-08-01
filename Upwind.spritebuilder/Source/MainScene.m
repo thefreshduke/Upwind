@@ -52,19 +52,7 @@
     if (timeSinceTouch>0.1) {
         _player.position = ccp(_player.position.x+3, _player.position.y);
     }
-}
-
-//-(void) initHoldTimer{
-//    _seconds = 1;
-//    timer = [NSTimer scheduledTimerWithTimeInterval:1.0
-//                                             target:self
-//                                           selector:@selector(hold:)
-//                                           userInfo:nil
-//                                            repeats:YES];
-//    //    _buttonLabel.string = [NSString stringWithFormat:@"%d", _seconds];
-//    //    else if (sender.state == UIGestureRecognizerStateCancelled || sender.state == UIGestureRecognizerStateEnded){
-//}
-             
+}             
              
 - (BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair playerCollision:(CCNode *)player wallCollision:(CCNode *)wall {
     return YES;
