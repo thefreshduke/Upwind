@@ -16,20 +16,16 @@
     CCPhysicsNode *_physicsNode;
     CCLabelTTF *_instructionLabel;
     BOOL touching;
-    float playerSpeed;
 }
 
 - (void)didLoadFromCCB {
     self.userInteractionEnabled = TRUE;
     _physicsNode.collisionDelegate = self;
-    _physicsNode.debugDraw = TRUE;
+    NSLog(@"distance: %f", (float) _wall.position.x * 1000000000000000000000000000.00000000000000000000000000 - (float) _player.position.x * 1000000000000000000000000000.00000000000000000000000000);
 }
 
 - (void) touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
-#define screenWidth [[CCDirector sharedDirector] viewSize].width
-    
     touching = true;
-    
     _instructionLabel.string = [NSString stringWithFormat:@"Release to stop"];
 }
 
@@ -39,7 +35,7 @@
 
 -(void)update:(CCTime)delta {
     if (touching) {
-        _player.position = ccp(_player.position.x+3, _player.position.y);
+        _player.position = ccp(_player.position.x+4, _player.position.y);
         //randomize anti-wind effect
         //calculate errorMargin = distancePlayerToWall
         //score += 1000 - errorMargin (score multipliers, streak bonuses)

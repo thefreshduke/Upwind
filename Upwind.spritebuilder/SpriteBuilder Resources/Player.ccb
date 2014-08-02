@@ -73,7 +73,7 @@
 						<array>
 							<real>0.0</real>
 							<real>0.0</real>
-							<integer>0</integer>
+							<integer>3</integer>
 							<integer>0</integer>
 							<integer>0</integer>
 						</array>
@@ -85,8 +85,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
-							<real>0.5</real>
+							<real>0.85000002384185791</real>
+							<real>0.11999999731779099</real>
 						</array>
 					</dict>
 					<dict>
@@ -150,9 +150,9 @@
 			<key>collisionMask</key>
 			<array/>
 			<key>collisionType</key>
-			<string>playerCollision</string>
+			<string></string>
 			<key>cornerRadius</key>
-			<real>22.789850234985352</real>
+			<real>20.301345825195312</real>
 			<key>density</key>
 			<real>1</real>
 			<key>dynamic</key>
@@ -164,8 +164,8 @@
 			<key>points</key>
 			<array>
 				<array>
-					<real>0.0</real>
-					<real>0.0</real>
+					<real>-19.7958984375</real>
+					<real>19.69482421875</real>
 				</array>
 			</array>
 			<key>polygons</key>

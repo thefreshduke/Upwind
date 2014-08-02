@@ -12,7 +12,7 @@
 
 - (void)didLoadFromCCB
 {
-    self.position = ccp(30, 45);
+    self.position = ccp(30, 20);
     self.physicsBody.collisionType = @"playerCollision";
 }
 
