@@ -12,7 +12,7 @@
 
 - (void)didLoadFromCCB
 {
-    self.position = ccp(545, 30);
+    self.position = ccp(530, 20);
     self.physicsBody.collisionType = @"wallCollision";
 }
 

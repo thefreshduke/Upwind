@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F0C98A6198C82D8006EC450 /* Gameplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0C98A5198C82D8006EC450 /* Gameplay.m */; };
+		6F0C98AE198C9CC4006EC450 /* Recap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0C98AD198C9CC4006EC450 /* Recap.m */; };
+		6F0C98B0198C9F0D006EC450 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = 6F0C98AF198C9F0D006EC450 /* Sounds */; };
 		6F9D089A198C112300817BD1 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D0899198C112300817BD1 /* Player.m */; };
 		6F9D089E198C112E00817BD1 /* Wall.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D089D198C112E00817BD1 /* Wall.m */; };
 		8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8392007918EE8E3300B6C429 /* GLKit.framework */; };
@@ -58,6 +61,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6F0C98A4198C82D8006EC450 /* Gameplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gameplay.h; path = Source/Gameplay.h; sourceTree = "<group>"; };
+		6F0C98A5198C82D8006EC450 /* Gameplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Gameplay.m; path = Source/Gameplay.m; sourceTree = "<group>"; };
+		6F0C98AC198C9CC3006EC450 /* Recap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Recap.h; path = Source/Recap.h; sourceTree = "<group>"; };
+		6F0C98AD198C9CC4006EC450 /* Recap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Recap.m; path = Source/Recap.m; sourceTree = "<group>"; };
+		6F0C98AF198C9F0D006EC450 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sounds; path = ../../../ResourcePack/Sounds; sourceTree = "<group>"; };
 		6F9D0898198C112300817BD1 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Source/Player.h; sourceTree = "<group>"; };
 		6F9D0899198C112300817BD1 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Source/Player.m; sourceTree = "<group>"; };
 		6F9D089C198C112E00817BD1 /* Wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wall.h; path = Source/Wall.h; sourceTree = "<group>"; };
@@ -133,6 +141,10 @@
 			children = (
 				B737893D1807617C0076A88C /* AppDelegate.h */,
 				B737893E1807617C0076A88C /* AppDelegate.m */,
+				6F0C98A4198C82D8006EC450 /* Gameplay.h */,
+				6F0C98A5198C82D8006EC450 /* Gameplay.m */,
+				6F0C98AC198C9CC3006EC450 /* Recap.h */,
+				6F0C98AD198C9CC4006EC450 /* Recap.m */,
 				B7378992180767190076A88C /* MainScene.h */,
 				B7378993180767190076A88C /* MainScene.m */,
 				6F9D0898198C112300817BD1 /* Player.h */,
@@ -175,6 +187,7 @@
 		B77F1B2517B978D7009739AE = {
 			isa = PBXGroup;
 			children = (
+				6F0C98AF198C9F0D006EC450 /* Sounds */,
 				B737893C1807616C0076A88C /* Source */,
 				B77F1B4617B978D7009739AE /* Resources */,
 				9222E2B918734FF800A246C7 /* libs */,
@@ -310,6 +323,7 @@
 			files = (
 				B71F5919188484E7003F4D28 /* Settings.png in Resources */,
 				B7378978180762440076A88C /* Default@2x.png in Resources */,
+				6F0C98B0198C9F0D006EC450 /* Sounds in Resources */,
 				B71F5914188484E7003F4D28 /* iPad@2x.png in Resources */,
 				B71F5913188484E7003F4D28 /* iPad.png in Resources */,
 				B71F5912188484E7003F4D28 /* iPad-old@2x.png in Resources */,
@@ -354,7 +368,9 @@
 				6F9D089A198C112300817BD1 /* Player.m in Sources */,
 				B737893F1807617C0076A88C /* AppDelegate.m in Sources */,
 				B7378994180767190076A88C /* MainScene.m in Sources */,
+				6F0C98AE198C9CC4006EC450 /* Recap.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
+				6F0C98A6198C82D8006EC450 /* Gameplay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,7 +454,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Upwind;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6E1998EB-320D-4966-B4C9-853B315A4F94";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -470,7 +486,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Upwind;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6E1998EB-320D-4966-B4C9-853B315A4F94";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

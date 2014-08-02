@@ -8,8 +8,6 @@
 
 #import "CCNode.h"
 
-@interface MainScene : CCNode <CCPhysicsCollisionDelegate>
-
-@property (nonatomic, assign) int seconds;
+@interface MainScene : CCNode
 
 @end

@@ -152,11 +152,11 @@
 			<key>collisionType</key>
 			<string>playerCollision</string>
 			<key>cornerRadius</key>
-			<real>23.046875</real>
+			<real>22.789850234985352</real>
 			<key>density</key>
 			<real>1</real>
 			<key>dynamic</key>
-			<true/>
+			<false/>
 			<key>elasticity</key>
 			<real>0.30000001192092896</real>
 			<key>friction</key>
