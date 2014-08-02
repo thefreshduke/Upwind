@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>21</integer>
+	<integer>27</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -649,7 +649,7 @@
 								<string>Text</string>
 								<key>value</key>
 								<array>
-									<string>DEATH AND DESTRUCTION</string>
+									<string>You blew up!</string>
 									<false/>
 								</array>
 							</dict>

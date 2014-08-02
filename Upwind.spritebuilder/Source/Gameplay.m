@@ -15,6 +15,9 @@
     Wall *_wall;
     CCPhysicsNode *_physicsNode;
     CCLabelTTF *_instructionLabel;
+    CCLabelTTF *_levelLabel;
+    CCLabelTTF *_scoreLabel;
+    CCLabelTTF *_marginLabel;
     BOOL touching;
 }
 
@@ -37,19 +40,24 @@
     //    NSLog(@"distance: %f", (float) _wall.position.x * 1000000000000000000000000000.00000000000000000000000000 - (float) _player.position.x * 1000000000000000000000000000.00000000000000000000000000);
     int distance = (_wall.position.x - _player.position.x) / 4;
     NSLog(@"distance: %d", distance);
-    if (_errorMargin += distance < 100 && distance >= 0) {
+    _errorMargin += distance;
+    if (_errorMargin < 100 && distance >= 0) {
         _level++;
-        _errorMargin += distance;
         _score += (100 -_errorMargin) * _level;
-        NSLog(@"error margin: %ld", (long)_errorMargin);
-        NSLog(@"score: %ld", (long)_score);
         NSLog(@"level: %ld", (long)_level);
-        _player.position = ccp(30, 20);
+        NSLog(@"score: %ld", (long)_score);
+        NSLog(@"margin: %ld", (long)(100 - _errorMargin));
+        _levelLabel.string = [NSString stringWithFormat:@"%d", _level];
+        _scoreLabel.string = [NSString stringWithFormat:@"%d", _score];
+        _marginLabel.string = [NSString stringWithFormat:@"%d", (100 - _errorMargin)];
+        _player.position = ccp(50, 20);
     }
     else {
-        NSLog(@"error margin: %ld", (long)_errorMargin);
-        NSLog(@"score: %ld", (long)_score);
-        NSLog(@"level: %ld", (long)_level);
+        _errorMargin -= distance;
+        NSLog(@"LOST");
+        NSLog(@"you finished on level %ld", (long)_level);
+        NSLog(@"your previous margin was %ld", (long)_errorMargin);
+        NSLog(@"your score is %ld", (long)_score);
         CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
         [[CCDirector sharedDirector] presentScene:recapScene];
     }

@@ -8,10 +8,12 @@
 
 #import "Recap.h"
 #import "Wall.h"
+#import "Gameplay.h"
 
 @implementation Recap {
     Wall *_wall;
     CCPhysicsNode *_physicsNode;
+    CCLabelTTF *_instructionLabel;
 }
 
 - (void)play {
