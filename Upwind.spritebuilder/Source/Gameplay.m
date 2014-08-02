@@ -42,14 +42,14 @@
         _errorMargin += distance;
         _score += (100 -_errorMargin) * _level;
         NSLog(@"error margin: %ld", (long)_errorMargin);
-        NSLog(@"score: %ld", _score);
-        NSLog(@"level: %ld", _level);
+        NSLog(@"score: %ld", (long)_score);
+        NSLog(@"level: %ld", (long)_level);
         _player.position = ccp(30, 20);
     }
     else {
         NSLog(@"error margin: %ld", (long)_errorMargin);
-        NSLog(@"score: %ld", _score);
-        NSLog(@"level: %ld", _level);
+        NSLog(@"score: %ld", (long)_score);
+        NSLog(@"level: %ld", (long)_level);
         CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
         [[CCDirector sharedDirector] presentScene:recapScene];
     }
