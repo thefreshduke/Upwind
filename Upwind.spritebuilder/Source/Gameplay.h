@@ -11,8 +11,9 @@
 @interface Gameplay : CCNode <CCPhysicsCollisionDelegate>
 
 @property (nonatomic, assign) NSInteger errorMargin; // = 100
-//@property (nonatomic, assign) NSInteger distance;
 @property (nonatomic, assign) NSInteger score; // = 0
 @property (nonatomic, assign) NSInteger level; // = 0
+@property (nonatomic, assign) NSInteger playerSpeed;
+@property (nonatomic, assign) NSInteger oscillatingWallSpeed;
 
 @end
