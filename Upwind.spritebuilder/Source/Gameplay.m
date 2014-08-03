@@ -20,7 +20,13 @@
     CCLabelTTF *_marginLabel;
     BOOL touching;
     BOOL oscillatingWall;
-    BOOL blowingWind;
+    BOOL headWind; // blowing on and off
+    BOOL tailWind; // blowing on and off // currently unused?
+    BOOL closingWall;
+    BOOL jumpingWall; // currently unused
+    BOOL secondWall; // a second wall appears behind and chases the player // currently unused
+    BOOL backwardsConveyerBelt; // constant movement
+    BOOL forwardsConveyerBelt; // constant movement // currently unused?
 }
 
 //calculate errorMargin = distancePlayerToWall
@@ -40,7 +46,9 @@
     _playerSpeed = 4;
     _oscillatingWallSpeed = -2;
     oscillatingWall = false;
-    blowingWind = false;
+    headWind = false;
+    closingWall = false;
+    backwardsConveyerBelt = false;
     _levelLabel.string = [NSString stringWithFormat:@"%d", _level];
     _scoreLabel.string = [NSString stringWithFormat:@"%d", _score];
     _marginLabel.string = [NSString stringWithFormat:@"%d", _errorMargin];
@@ -67,7 +75,12 @@
         _scoreLabel.string = [NSString stringWithFormat:@"%d", _score];
         _marginLabel.string = [NSString stringWithFormat:@"%d", _errorMargin];
         _player.position = ccp(50, 20);
-        _wall.position = ccp(450, 20);
+        if (headWind) {
+            _playerSpeed = 4;
+        }
+        if (closingWall) {
+            _wall.position = ccp(450, 20);
+        }
     }
     else {
         _errorMargin += distance;
@@ -82,27 +95,35 @@
 }
 
 -(void)update:(CCTime)delta {
-    if (_level > 3) {
+    if (_level > 1) {
         oscillatingWall = true;
-        blowingWind = false;
+        headWind = false;
+        closingWall = false;
+        backwardsConveyerBelt = false;
     }
-    if (_level > 6) {
+    if (_level > 2) {
         oscillatingWall = false;
-        blowingWind = true;
+        headWind = true;
+        closingWall = false;
+        backwardsConveyerBelt = false;
     }
-    if (blowingWind) {
-        long i = arc4random_uniform(20);
-        if (i < 17) {
-            _playerSpeed = 1;
-        }
-        else {
-//            NSLog(@"i: %ld and player.position: %f", (long) i, _player.position.x);
-            _playerSpeed = 4;
-        }
+    if (_level > 3) {
+        oscillatingWall = false;
+        headWind = false;
+        closingWall = true;
+        backwardsConveyerBelt = false;
     }
-    if (touching) {
-        _player.position = ccp(_player.position.x + _playerSpeed, _player.position.y);
-        //randomize anti-wind effect
+    if (_level > 4) {
+        oscillatingWall = false;
+        headWind = false;
+        closingWall = false;
+        backwardsConveyerBelt = true;
+    }
+    if (_level > 5) {
+        oscillatingWall = false;
+        headWind = false;
+        closingWall = false;
+        backwardsConveyerBelt = false;
     }
     if (oscillatingWall) {
         if (_wall.position.x >= 470) {
@@ -112,6 +133,26 @@
             _oscillatingWallSpeed = 2;
         }
         _wall.position = ccp(_wall.position.x + _oscillatingWallSpeed, _wall.position.y);
+    }
+    if (headWind) {
+        long i = arc4random_uniform(20);
+        if (i < 17) {
+            _playerSpeed = 1;
+        }
+        else {
+            //            NSLog(@"i: %ld and player.position: %f", (long) i, _player.position.x);
+            _playerSpeed = 4;
+        }
+    }
+    if (closingWall) {
+        _wall.position = ccp(_wall.position.x - 6, _wall.position.y);
+    }
+    if (backwardsConveyerBelt) {
+        _player.position = ccp(_player.position.x - 2, _player.position.y);
+    }
+    if (touching) {
+        _player.position = ccp(_player.position.x + _playerSpeed, _player.position.y);
+        //randomize anti-wind effect
     }
 }
 
