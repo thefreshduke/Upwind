@@ -159,10 +159,29 @@
 - (BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair playerCollision:(CCNode *)player wallCollision:(CCNode *)wall {
     [player removeFromParent];
     [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
+//    [self explode];
+    CCAnimationManager* animationManager = self.animationManager;
+//    [animationManager runAnimationsForSequenceNamed:@"Explosion"]; //what's wrong with this line? did i forget something that prevents this animation from happening??? do i need the explode method? or maybe the Explosion.m class?
     CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
-    [[CCDirector sharedDirector] presentScene:recapScene];
+//    [[CCDirector sharedDirector] presentScene:recapScene];
+    CCTransition *transition = [CCTransition transitionFadeWithDuration:1.0f];
+    [[CCDirector sharedDirector] presentScene:recapScene withTransition:transition];
     return YES;
 }
+
+//- (void)delay {
+//    float delay = 1.0f;
+//    // call method to start animation after random delay
+//    [self performSelector:@selector(explode) withObject:nil afterDelay:delay];
+////    [self performSelector:@selector(explode) withObject:nil];
+//}
+
+//- (void)explode { //potentially unneeded?
+//    // the animation manager of each node is stored in the 'animationManager' property
+//    CCAnimationManager* animationManager = self.animationManager;
+//    // timelines can be referenced and run by name
+//    [animationManager runAnimationsForSequenceNamed:@"Explosion"];
+//}
 
 - (void)play {
     CCScene *gameplayScene = [CCBReader loadAsScene:@"Gameplay"];
