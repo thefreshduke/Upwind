@@ -16,7 +16,7 @@
 //    float delay = (arc4random() % 2000) / 1000.f;
     // call method to start animation after random delay
 //    [self performSelector:@selector(startBlinkAndJump) withObject:nil afterDelay:delay];
-    [self performSelector:@selector(explode) withObject:nil];
+//    [self performSelector:@selector(explode) withObject:nil];
 }
 
 - (void)explode

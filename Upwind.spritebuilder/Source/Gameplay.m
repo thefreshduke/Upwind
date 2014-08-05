@@ -29,11 +29,6 @@
     BOOL forwardsConveyerBelt; // constant movement // currently unused?
 }
 
-//calculate errorMargin = distancePlayerToWall
-//score += 1000 - errorMargin (score multipliers, streak bonuses)
-//if errorMargin > 0 play another round
-//else go to recap for stats
-
 - (void)didLoadFromCCB {
     self.userInteractionEnabled = TRUE;
     _physicsNode.collisionDelegate = self;
@@ -120,8 +115,20 @@
         backwardsConveyerBelt = true;
     }
     if (_level > 5) {
+        oscillatingWall = true;
+        headWind = false;
+        closingWall = false;
+        backwardsConveyerBelt = true;
+    }
+    if (_level > 6) {
         oscillatingWall = false;
         headWind = false;
+        closingWall = true;
+        backwardsConveyerBelt = true;
+    }
+    if (_level > 7) {
+        oscillatingWall = true;
+        headWind = true;
         closingWall = false;
         backwardsConveyerBelt = false;
     }
@@ -136,10 +143,10 @@
     }
     if (headWind) {
         long i = arc4random_uniform(20);
-        if (i < 17) {
+        if (i < 15) {
             _playerSpeed = 1;
         }
-        else {
+        if (i == 19) {
             //            NSLog(@"i: %ld and player.position: %f", (long) i, _player.position.x);
             _playerSpeed = 4;
         }
@@ -157,31 +164,18 @@
 }
 
 - (BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair playerCollision:(CCNode *)player wallCollision:(CCNode *)wall {
-    [player removeFromParent];
     [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
-//    [self explode];
-    CCAnimationManager* animationManager = self.animationManager;
-//    [animationManager runAnimationsForSequenceNamed:@"Explosion"]; //what's wrong with this line? did i forget something that prevents this animation from happening??? do i need the explode method? or maybe the Explosion.m class?
+    CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
+    playerExplosion.position = ccp(player.position.x - 20, player.position.y + 20);
+    [player.parent addChild:playerExplosion];
+    [player removeFromParent];
     CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
-//    [[CCDirector sharedDirector] presentScene:recapScene];
+    int pause = 2.0;
+    [self schedule:@selector(goToRecap:) interval:pause];
     CCTransition *transition = [CCTransition transitionFadeWithDuration:1.0f];
     [[CCDirector sharedDirector] presentScene:recapScene withTransition:transition];
     return YES;
 }
-
-//- (void)delay {
-//    float delay = 1.0f;
-//    // call method to start animation after random delay
-//    [self performSelector:@selector(explode) withObject:nil afterDelay:delay];
-////    [self performSelector:@selector(explode) withObject:nil];
-//}
-
-//- (void)explode { //potentially unneeded?
-//    // the animation manager of each node is stored in the 'animationManager' property
-//    CCAnimationManager* animationManager = self.animationManager;
-//    // timelines can be referenced and run by name
-//    [animationManager runAnimationsForSequenceNamed:@"Explosion"];
-//}
 
 - (void)play {
     CCScene *gameplayScene = [CCBReader loadAsScene:@"Gameplay"];
