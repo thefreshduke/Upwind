@@ -90,43 +90,43 @@
 }
 
 -(void)update:(CCTime)delta {
-    if (_level > 1) {
+    if (_level > 2) {
         oscillatingWall = true;
         headWind = false;
         closingWall = false;
         backwardsConveyerBelt = false;
     }
-    if (_level > 2) {
+    if (_level > 4) {
         oscillatingWall = false;
         headWind = true;
         closingWall = false;
         backwardsConveyerBelt = false;
     }
-    if (_level > 3) {
+    if (_level > 6) {
         oscillatingWall = false;
         headWind = false;
         closingWall = true;
         backwardsConveyerBelt = false;
     }
-    if (_level > 4) {
+    if (_level > 8) {
         oscillatingWall = false;
         headWind = false;
         closingWall = false;
         backwardsConveyerBelt = true;
     }
-    if (_level > 5) {
+    if (_level > 10) {
         oscillatingWall = true;
         headWind = false;
         closingWall = false;
         backwardsConveyerBelt = true;
     }
-    if (_level > 6) {
+    if (_level > 12) {
         oscillatingWall = false;
         headWind = false;
         closingWall = true;
         backwardsConveyerBelt = true;
     }
-    if (_level > 7) {
+    if (_level > 14) {
         oscillatingWall = true;
         headWind = true;
         closingWall = false;
@@ -152,7 +152,7 @@
         }
     }
     if (closingWall) {
-        _wall.position = ccp(_wall.position.x - 6, _wall.position.y);
+        _wall.position = ccp(_wall.position.x - 2, _wall.position.y);
     }
     if (backwardsConveyerBelt) {
         _player.position = ccp(_player.position.x - 2, _player.position.y);
