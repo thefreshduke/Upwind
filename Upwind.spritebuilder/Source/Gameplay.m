@@ -9,6 +9,7 @@
 #import "Gameplay.h"
 #import "Player.h"
 #import "Wall.h"
+#import "Recap.h"
 
 @implementation Gameplay {
     Player *_player;
@@ -19,6 +20,8 @@
     CCLabelTTF *_scoreLabel;
     CCLabelTTF *_marginLabel;
     BOOL touching;
+    BOOL rulesExplained;
+    BOOL collision;
     BOOL oscillatingWall;
     BOOL headWind; // blowing on and off
     BOOL tailWind; // blowing on and off // currently unused?
@@ -37,55 +40,73 @@
     //    NSLog(@"score: %ld", _score);
     //    NSLog(@"level: %ld", _level);
     _level = 1;
+    _score = 0;
     _errorMargin = 100;
     _playerSpeed = 4;
     _oscillatingWallSpeed = -2;
+    rulesExplained = false;
+    collision = false;
     oscillatingWall = false;
     headWind = false;
     closingWall = false;
     backwardsConveyerBelt = false;
-    _levelLabel.string = [NSString stringWithFormat:@"%d", _level];
-    _scoreLabel.string = [NSString stringWithFormat:@"%d", _score];
-    _marginLabel.string = [NSString stringWithFormat:@"%d", _errorMargin];
+    _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
+    _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
+    _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
 }
 
 - (void) touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     touching = true;
-    _instructionLabel.string = [NSString stringWithFormat:@"Release to stop"];
+    if (!rulesExplained) {
+        _instructionLabel.string = [NSString stringWithFormat:@"Release to stop"];
+        rulesExplained = true;
+    }
+    else {
+        _instructionLabel.string = [NSString stringWithFormat:@" "];
+    }
 }
 
 - (void) touchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
-    touching = false;
-    //    NSLog(@"distance: %f", (float) _wall.position.x * 1000000000000000000000000000.00000000000000000000000000 - (float) _player.position.x * 1000000000000000000000000000.00000000000000000000000000);
-    int distance = (_wall.position.x - _player.position.x) / 4;
-    NSLog(@"distance: %d", distance);
-    _errorMargin -= distance;
-    if (_errorMargin > 0 && distance >= 0) {
-        _score += _errorMargin * _level;
-        _level++;
-        //        NSLog(@"level: %ld", (long)_level);
-        //        NSLog(@"score: %ld", (long)_score);
-        //        NSLog(@"margin: %ld", (long)_errorMargin);
-        _levelLabel.string = [NSString stringWithFormat:@"%d", _level];
-        _scoreLabel.string = [NSString stringWithFormat:@"%d", _score];
-        _marginLabel.string = [NSString stringWithFormat:@"%d", _errorMargin];
-        _player.position = ccp(50, 20);
-        if (headWind) {
-            _playerSpeed = 4;
+    if (!collision) {
+        touching = false;
+        //    NSLog(@"distance: %f", (float) _wall.position.x * 1000000000000000000000000000.00000000000000000000000000 - (float) _player.position.x * 1000000000000000000000000000.00000000000000000000000000);
+        
+        _instructionLabel.string = [NSString stringWithFormat:@" "];
+        
+        int distance = (_wall.position.x - _player.position.x) / 4;
+        //    NSLog(@"distance: %d", distance);
+        _errorMargin -= distance;
+        if (_errorMargin > 0 && distance >= 0) {
+            _score += _errorMargin * _level;
+            _level++;
+            //        NSLog(@"level: %ld", (long)_level);
+            //        NSLog(@"score: %ld", (long)_score);
+            //        NSLog(@"margin: %ld", (long)_errorMargin);
+            _levelLabel.string = [NSString stringWithFormat:@"%d", _level];
+            _scoreLabel.string = [NSString stringWithFormat:@"%d", _score];
+            _marginLabel.string = [NSString stringWithFormat:@"%d", _errorMargin];
+            _player.position = ccp(50, 20);
+            if (headWind) {
+                _playerSpeed = 4;
+            }
+            if (closingWall) {
+                _wall.position = ccp(450, 20);
+            }
         }
-        if (closingWall) {
-            _wall.position = ccp(450, 20);
+        else {
+            _errorMargin += distance;
+            _level--;
+            //        NSLog(@"LOST");
+            //        NSLog(@"you completed %ld levels", (long)_level);
+            //        NSLog(@"your previous margin was %ld", (long)_errorMargin);
+            //        NSLog(@"your score is %ld", (long)_score);
+            //        CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
+            //        [[CCDirector sharedDirector] presentScene:recapScene];
+            //        int pause = 2.0;
+            //        [self schedule:@selector(goToRecap:) interval:pause];
+//            [self goToRecap];
+            [self marginRecap];
         }
-    }
-    else {
-        _errorMargin += distance;
-        _level--;
-        //        NSLog(@"LOST");
-        NSLog(@"you completed %ld levels", (long)_level);
-        NSLog(@"your previous margin was %ld", (long)_errorMargin);
-        NSLog(@"your score is %ld", (long)_score);
-        CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
-        [[CCDirector sharedDirector] presentScene:recapScene];
     }
 }
 
@@ -164,22 +185,60 @@
 }
 
 - (BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair playerCollision:(CCNode *)player wallCollision:(CCNode *)wall {
+    collision = true;
     [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
     CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
     playerExplosion.position = ccp(player.position.x - 20, player.position.y + 20);
     [player.parent addChild:playerExplosion];
     [player removeFromParent];
-    CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
-    int pause = 2.0;
-    [self schedule:@selector(goToRecap:) interval:pause];
-    CCTransition *transition = [CCTransition transitionFadeWithDuration:1.0f];
-    [[CCDirector sharedDirector] presentScene:recapScene withTransition:transition];
+    //    touching = false;
+    int pause = 1.0;
+    //    [self schedule:@selector(explosionRecap:) interval:pause];
+    [self scheduleOnce:@selector(explosionRecap) delay:pause];
+    //no crash... needs to cancel touch
+    //doesn't transition to recap until player releases?
     return YES;
 }
 
-- (void)play {
-    CCScene *gameplayScene = [CCBReader loadAsScene:@"Gameplay"];
-    [[CCDirector sharedDirector] replaceScene:gameplayScene];
+//- (void)goToRecap {
+//    CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
+//    CCTransition *transition = [CCTransition transitionFadeWithDuration:1.0f];
+//    //    [recapScene setMessage:message score:self.score];
+//    [[CCDirector sharedDirector] presentScene:recapScene withTransition:transition];
+//}
+
+- (void)goToRecap:(NSString*)message {
+    Recap *recapScene = (Recap*)[CCBReader load:@"Recap"];
+    [recapScene setMessage:message level:_level score:_score];
+    CCScene *newScene = [CCScene node];
+    [newScene addChild:recapScene];
+    CCTransition *transition = [CCTransition transitionFadeWithDuration:1.0f];
+    [[CCDirector sharedDirector] presentScene:newScene withTransition:transition];
 }
+
+- (void)explosionRecap {
+    [self goToRecap:@"You blew up!"];
+}
+
+- (void)marginRecap {
+    [self goToRecap:@"Out of margin!"];
+}
+
+//- (void)endGameWithMessage:(NSString*)message {
+//    CCLOG(@"%@",message);
+//    NSNumber *highScore = [[NSUserDefaults standardUserDefaults] objectForKey:@"highScore"];
+//    if (self.score > [highScore intValue]) {
+//        // new high score!
+//        highScore = [NSNumber numberWithInt:self.score];
+//        [[NSUserDefaults standardUserDefaults] setObject:highScore forKey:@"highScore"];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    }
+//    GameEnd *gameEndPopover = (GameEnd *)[CCBReader load:@"GameEnd"];
+//    gameEndPopover.positionType = CCPositionTypeNormalized;
+//    gameEndPopover.position = ccp(0.5, 0.5);
+//    gameEndPopover.zOrder = INT_MAX;
+//    [gameEndPopover setMessage:message score:self.score];
+//    [self addChild:gameEndPopover];
+//}
 
 @end
