@@ -468,8 +468,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -758,7 +756,7 @@
 						<string>Text</string>
 						<key>value</key>
 						<array>
-							<string>Out of margin!</string>
+							<string></string>
 							<false/>
 						</array>
 					</dict>
@@ -894,6 +892,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -965,7 +965,7 @@
 						<string>Text</string>
 						<key>value</key>
 						<array>
-							<string>Best: 206395</string>
+							<string></string>
 							<false/>
 						</array>
 					</dict>
@@ -1379,7 +1379,7 @@
 						<string>Text</string>
 						<key>value</key>
 						<array>
-							<string>6</string>
+							<string></string>
 							<false/>
 						</array>
 					</dict>
@@ -1793,7 +1793,7 @@
 						<string>Text</string>
 						<key>value</key>
 						<array>
-							<string>1235</string>
+							<string></string>
 							<false/>
 						</array>
 					</dict>

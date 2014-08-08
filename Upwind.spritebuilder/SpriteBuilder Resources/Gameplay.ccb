@@ -1363,8 +1363,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -2207,7 +2205,7 @@
 						<string>Text</string>
 						<key>value</key>
 						<array>
-							<string>PERFECT</string>
+							<string></string>
 							<false/>
 						</array>
 					</dict>
@@ -2353,6 +2351,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>

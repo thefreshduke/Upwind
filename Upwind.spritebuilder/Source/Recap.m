@@ -31,7 +31,14 @@
 }
 
 - (void)didLoadFromCCB {
-    _highScoreLabel.string = [NSString stringWithFormat:@"High Score: 250209"];
+//    _highScoreLabel.string = [NSString stringWithFormat:@"High Score: 250209"];
+}
+
+- (void)updateHighScore {
+    NSNumber *newHighScore = [[NSUserDefaults standardUserDefaults] objectForKey:@"highScore"];
+    if (newHighScore) {
+        _highScoreLabel.string = [NSString stringWithFormat:@"%d", [newHighScore intValue]];
+    }
 }
 
 @end

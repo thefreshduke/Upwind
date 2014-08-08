@@ -12,6 +12,7 @@
 #import "Recap.h"
 
 @implementation Gameplay {
+    Recap *_recap;
     Player *_player;
     Wall *_wall;
     CCPhysicsNode *_physicsNode;
@@ -39,6 +40,15 @@
     //    NSLog(@"error margin: %ld", (long)_errorMargin);
     //    NSLog(@"score: %ld", _score);
     //    NSLog(@"level: %ld", _level);
+    
+    [self addObserver:self forKeyPath:@"score" options:0 context:NULL];
+    [[NSUserDefaults standardUserDefaults] addObserver:self
+                                            forKeyPath:@"highScore"
+                                               options:0
+                                               context:NULL];
+    // load high score
+    [_recap updateHighScore];
+    
     _level = 1;
     _score = 0;
     _errorMargin = 100;
@@ -53,6 +63,22 @@
     _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
     _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
     _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if ([keyPath isEqualToString:@"score"]) {
+        _scoreLabel.string = [NSString stringWithFormat:@"%d", _score];
+    } else if ([keyPath isEqualToString:@"highScore"]) {
+        [_recap updateHighScore];
+    }
+}
+
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"score"];
 }
 
 - (void) touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {

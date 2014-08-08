@@ -7,17 +7,19 @@
 //
 
 #import "MainScene.h"
+#import "Gameplay.h"
 #import "Player.h"
 #import "Wall.h"
 
 @implementation MainScene {
+//    Gameplay *_game;
     Player *_player;
     Wall *_wall;
     CCPhysicsNode *_physicsNode;
 }
 
 //- (void)didLoadFromCCB {
-//    [_grid addObserver:self forKeyPath:@"score" options:0 context:NULL];
+//    [_game addObserver:self forKeyPath:@"score" options:0 context:NULL];
 //    [[NSUserDefaults standardUserDefaults] addObserver:self
 //                                            forKeyPath:@"highScore"
 //                                               options:0
