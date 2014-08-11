@@ -27,6 +27,8 @@
     BOOL touching;
     BOOL rulesExplained;
     BOOL collision;
+    BOOL waiting;
+    BOOL highScore;
     BOOL oscillatingWall;
     BOOL headWind; // blowing on and off
     BOOL tailWind; // blowing on and off // currently unused?
@@ -38,6 +40,7 @@
 }
 
 - (void)didLoadFromCCB {
+
     self.userInteractionEnabled = TRUE;
     _physicsNode.collisionDelegate = self;
     //    NSLog(@"distance: %f", (float) _wall.position.x * 1000000000000000000000000000.00000000000000000000000000 - (float) _player.position.x * 1000000000000000000000000000.00000000000000000000000000);
@@ -60,11 +63,14 @@
     _oscillatingWallSpeed = -2;
     rulesExplained = false;
     collision = false;
+    highScore = false;
+    
     oscillatingWall = false;
     headWind = false;
     closingWall = false;
     backwardsConveyerBelt = false;
     forwardsConveyerBelt = false;
+    waiting = false;
     _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
     _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
     _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
@@ -88,6 +94,7 @@
 
 - (void) touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     touching = true;
+    waiting = false;
     if (!rulesExplained) {
         _instructionLabel.string = [NSString stringWithFormat:@"Release to stop"];
         rulesExplained = true;
@@ -96,6 +103,7 @@
         _instructionLabel.string = [NSString stringWithFormat:@" "];
     }
 }
+
 
 - (void) touchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
     if (!collision) {
@@ -117,7 +125,11 @@
             _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
             _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
             _performanceLabel.string = [NSString stringWithFormat:@"mysterion"]; // how to make label appear and float up and fade into disappearing?
-//            wait(2); // how to wait/delay briefly before "resetting" for next level?
+            [[self animationManager] runAnimationsForSequenceNamed:@"Default Timeline"];
+            waiting = true;
+            [self scheduleBlock:^(CCTimer *timer) {
+                waiting = false;
+            } delay:1.f]; //maybe switch time?
             _player.position = ccp(50, 20);
             if (headWind) {
                 _playerSpeed = 4;
@@ -129,7 +141,7 @@
         else {
 //            _errorMargin += distance;
 //            _level--;
-            self.userInteractionEnabled = FALSE;
+            self.userInteractionEnabled = false;
             _infoLabel1.string = [NSString stringWithFormat:@" "];
             _infoLabel2.string = [NSString stringWithFormat:@" "];
             _infoLabel3.string = [NSString stringWithFormat:@" "];
@@ -229,37 +241,40 @@
         backwardsConveyerBelt = false;
         forwardsConveyerBelt = true;
     }
-    if (oscillatingWall) {
-        if (_wall.position.x >= 470) {
-            _oscillatingWallSpeed = -2;
+    
+    if (!waiting) {
+        if (oscillatingWall) {
+            if (_wall.position.x >= 470) {
+                _oscillatingWallSpeed = -2;
+            }
+            if (_wall.position.x <= 430) {
+                _oscillatingWallSpeed = 2;
+            }
+            _wall.position = ccp(_wall.position.x + _oscillatingWallSpeed, _wall.position.y);
         }
-        if (_wall.position.x <= 430) {
-            _oscillatingWallSpeed = 2;
+        if (headWind) {
+            long i = arc4random_uniform(20);
+            if (i < 15) {
+                _playerSpeed = 1;
+            }
+            if (i == 19) {
+                //            NSLog(@"i: %ld and player.position: %f", (long) i, _player.position.x);
+                _playerSpeed = 4;
+            }
         }
-        _wall.position = ccp(_wall.position.x + _oscillatingWallSpeed, _wall.position.y);
-    }
-    if (headWind) {
-        long i = arc4random_uniform(20);
-        if (i < 15) {
-            _playerSpeed = 1;
+        if (closingWall) {
+            _wall.position = ccp(_wall.position.x - 2, _wall.position.y);
         }
-        if (i == 19) {
-            //            NSLog(@"i: %ld and player.position: %f", (long) i, _player.position.x);
-            _playerSpeed = 4;
+        if (backwardsConveyerBelt) {
+            _player.position = ccp(_player.position.x - 2, _player.position.y);
         }
-    }
-    if (closingWall) {
-        _wall.position = ccp(_wall.position.x - 2, _wall.position.y);
-    }
-    if (backwardsConveyerBelt) {
-        _player.position = ccp(_player.position.x - 2, _player.position.y);
-    }
-    if (forwardsConveyerBelt) {
-        _player.position = ccp(_player.position.x + 2, _player.position.y);
-    }
-    if (touching) {
-        _player.position = ccp(_player.position.x + _playerSpeed, _player.position.y);
-        //randomize anti-wind effect
+        if (forwardsConveyerBelt) {
+            _player.position = ccp(_player.position.x + 2, _player.position.y);
+        }
+        if (touching) {
+            _player.position = ccp(_player.position.x + _playerSpeed, _player.position.y);
+            //randomize anti-wind effect
+        }
     }
 }
 
@@ -293,6 +308,13 @@
 //}
 
 - (void)goToRecap:(NSString*)message {
+    
+    NSNumber* finalLevel = [NSNumber numberWithInt:self.level];
+    NSNumber* finalScore = [NSNumber numberWithInt:self.score];
+    NSNumber* ifHighScore = [NSNumber numberWithBool: highScore];
+    NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys: finalLevel, @"self.level", finalScore, @"self.score", ifHighScore, @"highScore", nil];
+    [MGWU logEvent:@"gameOver" withParams:params];
+    
     [self setHighScore];
     Recap *recapScene = (Recap*)[CCBReader load:@"Recap"];
     [recapScene setMessage:message level:_level score:_score];
@@ -305,7 +327,9 @@
 - (void)setHighScore {
     if (![[NSUserDefaults standardUserDefaults] integerForKey:@"HighScore"]) {
         [[NSUserDefaults standardUserDefaults] setInteger:self.score forKey:@"HighScore"];
-    } else if (self.score > [[NSUserDefaults standardUserDefaults] integerForKey:@"HighScore"]){
+    }
+    else if (self.score > [[NSUserDefaults standardUserDefaults] integerForKey:@"HighScore"]){
+        highScore = true;
         [[NSUserDefaults standardUserDefaults] setInteger:self.score forKey:@"HighScore"];
     }
 }

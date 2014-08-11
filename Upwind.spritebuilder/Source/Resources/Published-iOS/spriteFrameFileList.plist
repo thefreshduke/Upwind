@@ -9,7 +9,6 @@
 	</dict>
 	<key>spriteFrameFiles</key>
 	<array>
-		<string>Assets.plist</string>
 		<string>Animation.plist</string>
 	</array>
 </dict>
