@@ -29,6 +29,7 @@
     BOOL collision;
     BOOL waiting;
     BOOL highScore;
+    BOOL perfect;
     BOOL oscillatingWall;
     BOOL headWind; // blowing on and off
     BOOL tailWind; // blowing on and off // currently unused?
@@ -64,6 +65,7 @@
     rulesExplained = false;
     collision = false;
     highScore = false;
+    perfect = false;
     
     oscillatingWall = false;
     headWind = false;
@@ -124,12 +126,52 @@
             _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
             _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
             _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
-            _performanceLabel.string = [NSString stringWithFormat:@"mysterion"]; // how to make label appear and float up and fade into disappearing?
+            
+            if (distance == 0) {
+                perfect = true;
+                _performanceLabel.string = [NSString stringWithFormat:@"PERFECT 1"];
+            }
+            
+            if (distance < 0 && distance >= 1) {
+                _performanceLabel.string = [NSString stringWithFormat:@"PHENOMENAL 2"];
+            }
+            
+            if (distance < 1 && distance >= 2) {
+                _performanceLabel.string = [NSString stringWithFormat:@"AWESOME 3"];
+            }
+            
+            if (distance < 2 && distance >= 4) {
+                _performanceLabel.string = [NSString stringWithFormat:@"GREAT 4"];
+            }
+            
+            if (distance < 4 && distance >= 7) {
+                _performanceLabel.string = [NSString stringWithFormat:@"GOOD 5"];
+            }
+            
+            if (distance < 7 && distance >= 10) {
+                _performanceLabel.string = [NSString stringWithFormat:@"OKAY 6"];
+            }
+            
+            if (distance < 10 && distance >= 15) {
+                _performanceLabel.string = [NSString stringWithFormat:@"OKAY 7"];
+            }
+            
+            if (distance < 15 && distance >= 20) {
+                _performanceLabel.string = [NSString stringWithFormat:@"AWESOME 3"];
+            }
+            
             [[self animationManager] runAnimationsForSequenceNamed:@"Default Timeline"];
             waiting = true;
             [self scheduleBlock:^(CCTimer *timer) {
                 waiting = false;
             } delay:1.f]; //maybe switch time?
+            
+            NSNumber* margin = [NSNumber numberWithInt: self.errorMargin];
+            NSNumber* ifPerfect = [NSNumber numberWithBool: perfect];
+            NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys: margin, @"errorMargin", ifPerfect, @"perfect", nil];
+            [MGWU logEvent:@"levelComplete" withParams:params];
+            // syntax correct?
+            
             _player.position = ccp(50, 20);
             if (headWind) {
                 _playerSpeed = 4;
@@ -137,10 +179,9 @@
             if (closingWall) {
                 _wall.position = ccp(450, 20);
             }
+            perfect = false;
         }
         else {
-//            _errorMargin += distance;
-//            _level--;
             self.userInteractionEnabled = false;
             _infoLabel1.string = [NSString stringWithFormat:@" "];
             _infoLabel2.string = [NSString stringWithFormat:@" "];
@@ -155,18 +196,9 @@
             [_player.parent addChild:playerExplosion];
             [_player removeFromParent];
             [_wall removeFromParent];
-            //        NSLog(@"LOST");
-            //        NSLog(@"you completed %ld levels", (long)_level);
-            //        NSLog(@"your previous margin was %ld", (long)_errorMargin);
-            //        NSLog(@"your score is %ld", (long)_score);
-            //        CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
-            //        [[CCDirector sharedDirector] presentScene:recapScene];
-            //        int pause = 2.0;
-            //        [self schedule:@selector(goToRecap:) interval:pause];
-//            [self goToRecap];
+            
             float pause = 0.5;
             [self scheduleOnce:@selector(marginRecap) delay:pause];
-//            [self marginRecap];
         }
     }
 }
@@ -314,6 +346,7 @@
     NSNumber* ifHighScore = [NSNumber numberWithBool: highScore];
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys: finalLevel, @"self.level", finalScore, @"self.score", ifHighScore, @"highScore", nil];
     [MGWU logEvent:@"gameOver" withParams:params];
+    // syntax correct?
     
     [self setHighScore];
     Recap *recapScene = (Recap*)[CCBReader load:@"Recap"];
