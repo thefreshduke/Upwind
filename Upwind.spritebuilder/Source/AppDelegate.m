@@ -32,6 +32,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [MGWU loadMGWU:@"501gj3750rat3170"];
+//    [MGWU dark]; // the Cross Promo, About and Facebook Login pages have a dark theme instead of the standard white
+    
+//    [MGWU setAppiraterAppId:appid andAppName:appname];
+    [MGWU setReminderMessage:@"Brave enough for more Bombardare? "];
+    
     // Configure Cocos2d with the options set in SpriteBuilder
     NSString* configPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Published-iOS"]; // TODO: add support for Published-Android support
     configPath = [configPath stringByAppendingPathComponent:@"configCocos2d.plist"];
@@ -60,6 +66,23 @@
 - (CCScene*) startScene
 {
     return [CCBReader loadAsScene:@"MainScene"];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)tokenId {
+    [MGWU registerForPush:tokenId];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [MGWU gotPush:userInfo];
+}
+
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error{
+    [MGWU failedPush:error];
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    [MGWU gotLocalPush:notification];
 }
 
 @end

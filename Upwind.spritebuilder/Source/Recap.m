@@ -17,6 +17,7 @@
     CCLabelTTF *_highScoreLabel;
     CCLabelTTF *_levelLabel;
     CCLabelTTF *_scoreLabel;
+    BOOL highScore;
 }
 
 - (void)play {
@@ -26,19 +27,28 @@
 
 - (void)setMessage:(NSString *)message level:(NSInteger)level score:(NSInteger)score {
     _deathLabel.string = message;
-    _levelLabel.string = [NSString stringWithFormat:@"%d", level];
-    _scoreLabel.string = [NSString stringWithFormat:@"%d", score];
+    _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)level];
+//    if (!highScore) {
+        _scoreLabel.string = [NSString stringWithFormat:@"Your score: %ld", (long)score];
+//    } //how to shift between standard "your score/best score" and "YOU GOT A HIGH SCORE"?
 }
 
 - (void)didLoadFromCCB {
-//    _highScoreLabel.string = [NSString stringWithFormat:@"High Score: 250209"];
+    highScore = false;
+    [self updateHighScore];
 }
 
 - (void)updateHighScore {
-    NSNumber *newHighScore = [[NSUserDefaults standardUserDefaults] objectForKey:@"highScore"];
-    if (newHighScore) {
-        _highScoreLabel.string = [NSString stringWithFormat:@"%d", [newHighScore intValue]];
-    }
+    NSInteger *newHighScore = [[NSUserDefaults standardUserDefaults] integerForKey:@"HighScore"];
+    _highScoreLabel.string = [NSString stringWithFormat:@"BEST SCORE: %d", (int)newHighScore];
+}
+
+- (void)moreGames {
+    [MGWU displayCrossPromo];
+}
+
+- (void)aboutMe {
+    [MGWU displayAboutPage];
 }
 
 @end
