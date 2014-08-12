@@ -71,11 +71,11 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>0.0</real>
-							<real>0.0</real>
+							<real>0.20000000298023224</real>
+							<real>0.5</real>
 							<integer>3</integer>
-							<integer>0</integer>
-							<integer>0</integer>
+							<integer>2</integer>
+							<integer>2</integer>
 						</array>
 					</dict>
 					<dict>
@@ -85,8 +85,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.85000002384185791</real>
-							<real>0.11999999731779099</real>
+							<real>0.5</real>
+							<real>0.5</real>
 						</array>
 					</dict>
 					<dict>
@@ -110,7 +110,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>Assets/obj_bomb3_004@4x.png</string>
+							<string>Assets/bomb.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -152,7 +152,7 @@
 			<key>collisionType</key>
 			<string></string>
 			<key>cornerRadius</key>
-			<real>20.301345825195312</real>
+			<real>20</real>
 			<key>density</key>
 			<real>1</real>
 			<key>dynamic</key>
@@ -160,12 +160,12 @@
 			<key>elasticity</key>
 			<real>0.30000001192092896</real>
 			<key>friction</key>
-			<real>0.30000001192092896</real>
+			<real>0.0</real>
 			<key>points</key>
 			<array>
 				<array>
-					<real>-19.7958984375</real>
-					<real>19.69482421875</real>
+					<real>53.700263977050781</real>
+					<real>28.809062957763672</real>
 				</array>
 			</array>
 			<key>polygons</key>
@@ -188,7 +188,7 @@
 				<string>Position</string>
 				<key>value</key>
 				<array>
-					<real>-10</real>
+					<real>0.0</real>
 					<real>0.0</real>
 					<integer>0</integer>
 					<integer>0</integer>
@@ -202,8 +202,8 @@
 				<string>Size</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
-					<real>0.0</real>
+					<real>64</real>
+					<real>64</real>
 					<integer>0</integer>
 					<integer>0</integer>
 				</array>
@@ -215,7 +215,7 @@
 				<string>Point</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
+					<real>1.1499999761581421</real>
 					<real>0.0</real>
 				</array>
 			</dict>

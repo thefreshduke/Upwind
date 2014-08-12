@@ -23,6 +23,7 @@
     CCLabelTTF *_levelLabel;
     CCLabelTTF *_scoreLabel;
     CCLabelTTF *_marginLabel;
+    CCLabelTTF *_deathLabel;
     CCLabelTTF *_performanceLabel;
     BOOL touching;
     BOOL rulesExplained;
@@ -38,6 +39,7 @@
     BOOL secondWall; // a second wall appears behind and chases the player // currently unused
     BOOL backwardsConveyerBelt; // constant movement
     BOOL forwardsConveyerBelt; // constant movement // currently unused?
+    int perfectStreak;
 }
 
 - (void)didLoadFromCCB {
@@ -73,6 +75,8 @@
     backwardsConveyerBelt = false;
     forwardsConveyerBelt = false;
     waiting = false;
+    perfectStreak = 0;
+    
     _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
     _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
     _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
@@ -128,36 +132,47 @@
             _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
             
             if (distance == 0) {
+                
                 perfect = true;
-                _performanceLabel.string = [NSString stringWithFormat:@"PERFECT 1"];
+                _performanceLabel.string = [NSString stringWithFormat:@"PERFECT"];
+                
+                if (perfect) {
+                    perfectStreak++;
+                }
+                else {
+                    perfectStreak = 0;
+                }
+                
+                if (perfectStreak > 1) {
+                    _performanceLabel.string = [NSString stringWithFormat:@"WOW"];
+                }
+                if (perfectStreak > 2) {
+                    _performanceLabel.string = [NSString stringWithFormat:@"AMAZING"];
+                }
+                if (perfectStreak > 3) {
+                    _performanceLabel.string = [NSString stringWithFormat:@"LEGEND..."];
+                }
+                if (perfectStreak > 4) {
+                    _performanceLabel.string = [NSString stringWithFormat:@"ARY!!!"];
+                }
+                if (perfectStreak > 5) {
+                    _performanceLabel.string = [NSString stringWithFormat:@"PHENOMENAL"];
+                }
             }
-            
-            if (distance < 0 && distance >= 1) {
-                _performanceLabel.string = [NSString stringWithFormat:@"PHENOMENAL 2"];
+            else if (distance > 0 && distance <= 2) {
+                _performanceLabel.string = [NSString stringWithFormat:@"AWESOME"];
             }
-            
-            if (distance < 1 && distance >= 2) {
-                _performanceLabel.string = [NSString stringWithFormat:@"AWESOME 3"];
+            else if (distance > 2 && distance <= 5) {
+                _performanceLabel.string = [NSString stringWithFormat:@"GREAT"];
             }
-            
-            if (distance < 2 && distance >= 4) {
-                _performanceLabel.string = [NSString stringWithFormat:@"GREAT 4"];
+            else if (distance > 5 && distance <= 10) {
+                _performanceLabel.string = [NSString stringWithFormat:@"GOOD"];
             }
-            
-            if (distance < 4 && distance >= 7) {
-                _performanceLabel.string = [NSString stringWithFormat:@"GOOD 5"];
+            else if (distance > 10 && distance <= 20) {
+                _performanceLabel.string = [NSString stringWithFormat:@"OKAY"];
             }
-            
-            if (distance < 7 && distance >= 10) {
-                _performanceLabel.string = [NSString stringWithFormat:@"OKAY 6"];
-            }
-            
-            if (distance < 10 && distance >= 15) {
-                _performanceLabel.string = [NSString stringWithFormat:@"OKAY 7"];
-            }
-            
-            if (distance < 15 && distance >= 20) {
-                _performanceLabel.string = [NSString stringWithFormat:@"AWESOME 3"];
+            else {
+                _performanceLabel.string = [NSString stringWithFormat:@" "];
             }
             
             [[self animationManager] runAnimationsForSequenceNamed:@"Default Timeline"];
@@ -172,12 +187,12 @@
             [MGWU logEvent:@"levelComplete" withParams:params];
             // syntax correct?
             
-            _player.position = ccp(50, 20);
+            _player.position = ccp(0, 17);
             if (headWind) {
                 _playerSpeed = 4;
             }
             if (closingWall) {
-                _wall.position = ccp(450, 20);
+                _wall.position = ccp(450, 17);
             }
             perfect = false;
         }
@@ -188,7 +203,8 @@
             _infoLabel3.string = [NSString stringWithFormat:@" "];
             _levelLabel.string = [NSString stringWithFormat:@" "];
             _scoreLabel.string = [NSString stringWithFormat:@" "];
-            _marginLabel.string = [NSString stringWithFormat:@"Out of margin!"];
+            _marginLabel.string = [NSString stringWithFormat:@" "];
+            _deathLabel.string = [NSString stringWithFormat:@"Too far from the wall!"];
             _instructionLabel.string = [NSString stringWithFormat:@" "];
             [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
             CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
@@ -276,10 +292,10 @@
     
     if (!waiting) {
         if (oscillatingWall) {
-            if (_wall.position.x >= 470) {
+            if (_wall.position.x >= 450) {
                 _oscillatingWallSpeed = -2;
             }
-            if (_wall.position.x <= 430) {
+            if (_wall.position.x <= 410) {
                 _oscillatingWallSpeed = 2;
             }
             _wall.position = ccp(_wall.position.x + _oscillatingWallSpeed, _wall.position.y);
@@ -318,7 +334,8 @@
     _infoLabel3.string = [NSString stringWithFormat:@" "];
     _levelLabel.string = [NSString stringWithFormat:@" "];
     _scoreLabel.string = [NSString stringWithFormat:@" "];
-    _marginLabel.string = [NSString stringWithFormat:@"You exploded!"];
+    _marginLabel.string = [NSString stringWithFormat:@" "];
+    _deathLabel.string = [NSString stringWithFormat:@"You ran into the wall!"];
     _instructionLabel.string = [NSString stringWithFormat:@" "];
     [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
     CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
@@ -368,7 +385,7 @@
 }
 
 - (void)explosionRecap {
-    [self goToRecap:@"You blew up!"];
+    [self goToRecap:@"You exploded!"];
 }
 
 - (void)marginRecap {
