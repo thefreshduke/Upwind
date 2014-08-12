@@ -17,6 +17,7 @@
     Wall *_wall;
     CCPhysicsNode *_physicsNode;
     CCLabelTTF *_instructionLabel;
+    CCLabelTTF *_obstacleLabel;
     CCLabelTTF *_infoLabel1;
     CCLabelTTF *_infoLabel2;
     CCLabelTTF *_infoLabel3;
@@ -77,7 +78,7 @@
     waiting = false;
     perfectStreak = 0;
     
-    _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
+//    _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
     _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
     _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
 }
@@ -127,7 +128,7 @@
             //        NSLog(@"level: %ld", (long)_level);
             //        NSLog(@"score: %ld", (long)_score);
             //        NSLog(@"margin: %ld", (long)_errorMargin);
-            _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
+//            _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
             _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
             _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
             
@@ -192,20 +193,21 @@
                 _playerSpeed = 4;
             }
             if (closingWall) {
-                _wall.position = ccp(450, 17);
+                _wall.position = ccp(400, 17);
             }
             perfect = false;
         }
         else {
             self.userInteractionEnabled = false;
-            _infoLabel1.string = [NSString stringWithFormat:@" "];
-            _infoLabel2.string = [NSString stringWithFormat:@" "];
-            _infoLabel3.string = [NSString stringWithFormat:@" "];
-            _levelLabel.string = [NSString stringWithFormat:@" "];
-            _scoreLabel.string = [NSString stringWithFormat:@" "];
-            _marginLabel.string = [NSString stringWithFormat:@" "];
+            [_instructionLabel removeFromParent];
+            [_obstacleLabel removeFromParent];
+            [_infoLabel1 removeFromParent];
+            [_infoLabel2 removeFromParent];
+            [_infoLabel3 removeFromParent];
+            [_scoreLabel removeFromParent];
+            [_marginLabel removeFromParent];
             _deathLabel.string = [NSString stringWithFormat:@"Too far from the wall!"];
-            _instructionLabel.string = [NSString stringWithFormat:@" "];
+            [_performanceLabel removeFromParent];
             [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
             CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
             playerExplosion.position = ccp(_player.position.x - 20, _player.position.y + 20);
@@ -220,13 +222,13 @@
 }
 
 -(void)update:(CCTime)delta {
-    if (_level > 4) {
+    if (_level > -1) {
         oscillatingWall = true;
         headWind = false;
         closingWall = false;
         backwardsConveyerBelt = false;
         forwardsConveyerBelt = false;
-        _instructionLabel.string = [NSString stringWithFormat:@"New Obstacle: Oscillating Wall"];
+        _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Oscillating Wall"];
     }
     if (_level > 8) {
         oscillatingWall = false;
@@ -234,7 +236,7 @@
         closingWall = true;
         backwardsConveyerBelt = false;
         forwardsConveyerBelt = false;
-        _instructionLabel.string = [NSString stringWithFormat:@"New Obstacle: Closing Wall"];
+        _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Closing Wall"];
     }
     if (_level > 12) {
         oscillatingWall = false;
@@ -242,7 +244,7 @@
         closingWall = false;
         backwardsConveyerBelt = false;
         forwardsConveyerBelt = false;
-        _instructionLabel.string = [NSString stringWithFormat:@"New Obstacle: Head Wind"];
+        _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Head Wind"];
     }
     if (_level > 16) {
         oscillatingWall = false;
@@ -250,7 +252,7 @@
         closingWall = false;
         backwardsConveyerBelt = false;
         forwardsConveyerBelt = true;
-        _instructionLabel.string = [NSString stringWithFormat:@"New Obstacle: Forwards Conveyer Belt"];
+        _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Forwards Conveyer Belt"];
     }
     if (_level > 20) {
         oscillatingWall = false;
@@ -258,7 +260,7 @@
         closingWall = false;
         backwardsConveyerBelt = true;
         forwardsConveyerBelt = false;
-        _instructionLabel.string = [NSString stringWithFormat:@"New Obstacle: Backwards Conveyer Belt"];
+        _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Backwards Conveyer Belt"];
     }
     if (_level > 24) {
         oscillatingWall = true;
@@ -266,7 +268,7 @@
         closingWall = false;
         backwardsConveyerBelt = false;
         forwardsConveyerBelt = true;
-        _instructionLabel.string = [NSString stringWithFormat:@" "];
+        _obstacleLabel.string = [NSString stringWithFormat:@" "];
     }
     if (_level > 28) {
         oscillatingWall = false;
@@ -292,10 +294,10 @@
     
     if (!waiting) {
         if (oscillatingWall) {
-            if (_wall.position.x >= 450) {
+            if (_wall.position.x >= 420) {
                 _oscillatingWallSpeed = -2;
             }
-            if (_wall.position.x <= 410) {
+            if (_wall.position.x <= 380) {
                 _oscillatingWallSpeed = 2;
             }
             _wall.position = ccp(_wall.position.x + _oscillatingWallSpeed, _wall.position.y);
@@ -329,14 +331,15 @@
 - (BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair playerCollision:(CCNode *)player wallCollision:(CCNode *)wall {
     collision = true;
     self.userInteractionEnabled = FALSE;
-    _infoLabel1.string = [NSString stringWithFormat:@" "];
-    _infoLabel2.string = [NSString stringWithFormat:@" "];
-    _infoLabel3.string = [NSString stringWithFormat:@" "];
-    _levelLabel.string = [NSString stringWithFormat:@" "];
-    _scoreLabel.string = [NSString stringWithFormat:@" "];
-    _marginLabel.string = [NSString stringWithFormat:@" "];
-    _deathLabel.string = [NSString stringWithFormat:@"You ran into the wall!"];
-    _instructionLabel.string = [NSString stringWithFormat:@" "];
+    [_instructionLabel removeFromParent];
+    [_obstacleLabel removeFromParent];
+    [_infoLabel1 removeFromParent];
+    [_infoLabel2 removeFromParent];
+    [_infoLabel3 removeFromParent];
+    [_scoreLabel removeFromParent];
+    [_marginLabel removeFromParent];
+    _deathLabel.string = [NSString stringWithFormat:@"Too far from the wall!"];
+    [_performanceLabel removeFromParent];
     [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
     CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
     playerExplosion.position = ccp(player.position.x - 20, player.position.y + 20);
@@ -391,22 +394,5 @@
 - (void)marginRecap {
     [self goToRecap:@"Out of margin!"];
 }
-
-//- (void)endGameWithMessage:(NSString*)message {
-//    CCLOG(@"%@",message);
-//    NSNumber *highScore = [[NSUserDefaults standardUserDefaults] objectForKey:@"highScore"];
-//    if (self.score > [highScore intValue]) {
-//        // new high score!
-//        highScore = [NSNumber numberWithInt:self.score];
-//        [[NSUserDefaults standardUserDefaults] setObject:highScore forKey:@"highScore"];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
-//    }
-//    GameEnd *gameEndPopover = (GameEnd *)[CCBReader load:@"GameEnd"];
-//    gameEndPopover.positionType = CCPositionTypeNormalized;
-//    gameEndPopover.position = ccp(0.5, 0.5);
-//    gameEndPopover.zOrder = INT_MAX;
-//    [gameEndPopover setMessage:message score:self.score];
-//    [self addChild:gameEndPopover];
-//}
 
 @end

@@ -29,7 +29,7 @@
     _deathLabel.string = message;
     _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)level];
 //    if (!highScore) {
-        _scoreLabel.string = [NSString stringWithFormat:@"Your score: %ld", (long)score];
+        _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)score];
 //    } //how to shift between standard "your score/best score" and "YOU GOT A HIGH SCORE"?
 }
 
@@ -40,7 +40,7 @@
 
 - (void)updateHighScore {
     NSInteger *newHighScore = [[NSUserDefaults standardUserDefaults] integerForKey:@"HighScore"];
-    _highScoreLabel.string = [NSString stringWithFormat:@"BEST SCORE: %d", (int)newHighScore];
+    _highScoreLabel.string = [NSString stringWithFormat:@"%d", (int)newHighScore];
 }
 
 - (void)moreGames {
