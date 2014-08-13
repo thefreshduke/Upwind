@@ -87,6 +87,7 @@
 		6F10855A1996A18300CF5E76 /* send-button-instate.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F1085141996A18300CF5E76 /* send-button-instate.png */; };
 		6F10855B1996A18300CF5E76 /* send-field-landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F1085151996A18300CF5E76 /* send-field-landscape.png */; };
 		6F346D0319950C5600ADEDE4 /* Explosion.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F346D0219950C5600ADEDE4 /* Explosion.m */; };
+		6F548068199B3FD10041E047 /* Tutorial.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F548067199B3FD10041E047 /* Tutorial.m */; };
 		6F9D089A198C112300817BD1 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D0899198C112300817BD1 /* Player.m */; };
 		6F9D089E198C112E00817BD1 /* Wall.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D089D198C112E00817BD1 /* Wall.m */; };
 		8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8392007918EE8E3300B6C429 /* GLKit.framework */; };
@@ -221,6 +222,8 @@
 		6F1085151996A18300CF5E76 /* send-field-landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-field-landscape.png"; sourceTree = "<group>"; };
 		6F346D0119950C5600ADEDE4 /* Explosion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Explosion.h; path = Source/Explosion.h; sourceTree = "<group>"; };
 		6F346D0219950C5600ADEDE4 /* Explosion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Explosion.m; path = Source/Explosion.m; sourceTree = "<group>"; };
+		6F548066199B3FD10041E047 /* Tutorial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tutorial.h; path = Source/Tutorial.h; sourceTree = "<group>"; };
+		6F548067199B3FD10041E047 /* Tutorial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tutorial.m; path = Source/Tutorial.m; sourceTree = "<group>"; };
 		6F9D0898198C112300817BD1 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Source/Player.h; sourceTree = "<group>"; };
 		6F9D0899198C112300817BD1 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Source/Player.m; sourceTree = "<group>"; };
 		6F9D089C198C112E00817BD1 /* Wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wall.h; path = Source/Wall.h; sourceTree = "<group>"; };
@@ -398,6 +401,8 @@
 				B7378993180767190076A88C /* MainScene.m */,
 				6F9D0898198C112300817BD1 /* Player.h */,
 				6F9D0899198C112300817BD1 /* Player.m */,
+				6F548066199B3FD10041E047 /* Tutorial.h */,
+				6F548067199B3FD10041E047 /* Tutorial.m */,
 				6F9D089C198C112E00817BD1 /* Wall.h */,
 				6F9D089D198C112E00817BD1 /* Wall.m */,
 			);
@@ -697,6 +702,7 @@
 				B73789871807631A0076A88C /* main.m in Sources */,
 				6F0C98A6198C82D8006EC450 /* Gameplay.m in Sources */,
 				6F346D0319950C5600ADEDE4 /* Explosion.m in Sources */,
+				6F548068199B3FD10041E047 /* Tutorial.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

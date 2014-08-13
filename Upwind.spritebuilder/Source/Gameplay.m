@@ -27,7 +27,6 @@
     CCLabelTTF *_deathLabel;
     CCLabelTTF *_performanceLabel;
     BOOL touching;
-    BOOL rulesExplained;
     BOOL collision;
     BOOL waiting;
     BOOL highScore;
@@ -45,8 +44,9 @@
 
 - (void)didLoadFromCCB {
 
-    self.userInteractionEnabled = TRUE;
+    self.userInteractionEnabled = true;
     _physicsNode.collisionDelegate = self;
+//    _physicsNode.debugDraw = true;
     //    NSLog(@"distance: %f", (float) _wall.position.x * 1000000000000000000000000000.00000000000000000000000000 - (float) _player.position.x * 1000000000000000000000000000.00000000000000000000000000);
     //    NSLog(@"error margin: %ld", (long)_errorMargin);
     //    NSLog(@"score: %ld", _score);
@@ -60,12 +60,16 @@
     // load high score
     [_recap updateHighScore];
     
+//    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"tutorialCompleted"]) {
+//        [self startTutorial];
+//    }
+//    [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"tutorialCompleted"];
+    
     _level = 1;
     _score = 0;
     _errorMargin = 100;
     _playerSpeed = 4;
     _oscillatingWallSpeed = -2;
-    rulesExplained = false;
     collision = false;
     highScore = false;
     perfect = false;
@@ -78,6 +82,7 @@
     waiting = false;
     perfectStreak = 0;
     
+    _instructionLabel.string = [NSString stringWithFormat:@"Hold to move"];
 //    _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
     _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
     _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
@@ -102,35 +107,31 @@
 - (void) touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     touching = true;
     waiting = false;
-    if (!rulesExplained) {
-        _instructionLabel.string = [NSString stringWithFormat:@"Release to stop"];
-        rulesExplained = true;
-    }
-    else {
-        _instructionLabel.string = [NSString stringWithFormat:@" "];
-    }
+    _instructionLabel.string = [NSString stringWithFormat:@"Release to stop"];
+    [self scheduleBlock:^(CCTimer *timer) {
+        [_instructionLabel removeFromParent];
+    } delay:1.f];
 }
 
-
 - (void) touchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+    
+//    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"tutorialCompleted"]) {
     if (!collision) {
+    
         touching = false;
-        //    NSLog(@"distance: %f", (float) _wall.position.x * 1000000000000000000000000000.00000000000000000000000000 - (float) _player.position.x * 1000000000000000000000000000.00000000000000000000000000);
-        
-        _instructionLabel.string = [NSString stringWithFormat:@" "];
-        
         int distance = (_wall.position.x - _player.position.x) / 4;
-        //    NSLog(@"distance: %d", distance);
         _errorMargin -= distance;
+        
         if (_errorMargin > 0 && distance >= 0) {
+            
             _score += _errorMargin * _level;
             _level++;
-            //        NSLog(@"level: %ld", (long)_level);
-            //        NSLog(@"score: %ld", (long)_score);
-            //        NSLog(@"margin: %ld", (long)_errorMargin);
-//            _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)_level];
             _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
             _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
+            
+            if (distance <= 10) {
+                [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"tutorialCompleted"];
+            }
             
             if (distance == 0) {
                 
@@ -173,14 +174,15 @@
                 _performanceLabel.string = [NSString stringWithFormat:@"OKAY"];
             }
             else {
-                _performanceLabel.string = [NSString stringWithFormat:@" "];
+                _performanceLabel.string = [NSString stringWithFormat:@"GO TO THE WALL"];
+                //play X buzzer wrong on game show sound effect?
             }
             
             [[self animationManager] runAnimationsForSequenceNamed:@"Default Timeline"];
             waiting = true;
             [self scheduleBlock:^(CCTimer *timer) {
                 waiting = false;
-            } delay:1.f]; //maybe switch time?
+            } delay:1.5f]; //maybe switch time?
             
             NSNumber* margin = [NSNumber numberWithInt: self.errorMargin];
             NSNumber* ifPerfect = [NSNumber numberWithBool: perfect];
@@ -199,15 +201,15 @@
         }
         else {
             self.userInteractionEnabled = false;
-            [_instructionLabel removeFromParent];
+//            [_instructionLabel removeFromParent];
             [_obstacleLabel removeFromParent];
             [_infoLabel1 removeFromParent];
             [_infoLabel2 removeFromParent];
             [_infoLabel3 removeFromParent];
             [_scoreLabel removeFromParent];
             [_marginLabel removeFromParent];
-            _deathLabel.string = [NSString stringWithFormat:@"Too far from the wall!"];
             [_performanceLabel removeFromParent];
+            _deathLabel.string = [NSString stringWithFormat:@"Too far from the wall!"];
             [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
             CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
             playerExplosion.position = ccp(_player.position.x - 20, _player.position.y + 20);
@@ -216,13 +218,13 @@
             [_wall removeFromParent];
             
             float pause = 0.5;
-            [self scheduleOnce:@selector(marginRecap) delay:pause];
+            [self scheduleOnce:@selector(goToRecap) delay:pause];
         }
     }
 }
 
 -(void)update:(CCTime)delta {
-    if (_level > -1) {
+    if (_level > 4) {
         oscillatingWall = true;
         headWind = false;
         closingWall = false;
@@ -302,16 +304,31 @@
             }
             _wall.position = ccp(_wall.position.x + _oscillatingWallSpeed, _wall.position.y);
         }
+//        if (headWind) { //works as intended, except it sometimes crashes??? needs visuals...
+//            long i = arc4random_uniform(20);
+//            if (_playerSpeed == 4) {
+//                [self scheduleBlock:^(CCTimer *timer) {
+//                    if (i < 15) {
+//                        _playerSpeed = 1;
+//                    }
+//                } delay:0.5f];
+//            }
+//            else {
+//                if (i == 19) {
+//                    _playerSpeed = 4;
+//                }
+//            }
+//        }
         if (headWind) {
             long i = arc4random_uniform(20);
             if (i < 15) {
                 _playerSpeed = 1;
             }
             if (i == 19) {
-                //            NSLog(@"i: %ld and player.position: %f", (long) i, _player.position.x);
                 _playerSpeed = 4;
             }
         }
+        
         if (closingWall) {
             _wall.position = ccp(_wall.position.x - 2, _wall.position.y);
         }
@@ -330,16 +347,16 @@
 
 - (BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair playerCollision:(CCNode *)player wallCollision:(CCNode *)wall {
     collision = true;
-    self.userInteractionEnabled = FALSE;
-    [_instructionLabel removeFromParent];
+    self.userInteractionEnabled = false;
+    //    [_instructionLabel removeFromParent];
     [_obstacleLabel removeFromParent];
     [_infoLabel1 removeFromParent];
     [_infoLabel2 removeFromParent];
     [_infoLabel3 removeFromParent];
     [_scoreLabel removeFromParent];
     [_marginLabel removeFromParent];
-    _deathLabel.string = [NSString stringWithFormat:@"Too far from the wall!"];
     [_performanceLabel removeFromParent];
+    _deathLabel.string = [NSString stringWithFormat:@"You ran into the wall!"];
     [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
     CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
     playerExplosion.position = ccp(player.position.x - 20, player.position.y + 20);
@@ -347,30 +364,21 @@
     [player removeFromParent];
     [wall removeFromParent];
     float pause = 0.5;
-//    [playerExplosion removeFromParent];
-    [self scheduleOnce:@selector(explosionRecap) delay:pause];
+    //    [playerExplosion removeFromParent];
+    [self scheduleOnce:@selector(goToRecap) delay:pause];
     return YES;
 }
 
-//- (void)goToRecap {
-//    CCScene *recapScene = [CCBReader loadAsScene:@"Recap"];
-//    CCTransition *transition = [CCTransition transitionFadeWithDuration:1.0f];
-//    //    [recapScene setMessage:message score:self.score];
-//    [[CCDirector sharedDirector] presentScene:recapScene withTransition:transition];
-//}
-
-- (void)goToRecap:(NSString*)message {
-    
+- (void)goToRecap {
     NSNumber* finalLevel = [NSNumber numberWithInt:self.level];
     NSNumber* finalScore = [NSNumber numberWithInt:self.score];
     NSNumber* ifHighScore = [NSNumber numberWithBool: highScore];
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys: finalLevel, @"self.level", finalScore, @"self.score", ifHighScore, @"highScore", nil];
     [MGWU logEvent:@"gameOver" withParams:params];
-    // syntax correct?
     
     [self setHighScore];
     Recap *recapScene = (Recap*)[CCBReader load:@"Recap"];
-    [recapScene setMessage:message level:_level score:_score];
+    [recapScene setScore: self.score];
     CCScene *newScene = [CCScene node];
     [newScene addChild:recapScene];
     CCTransition *transition = [CCTransition transitionFadeWithDuration:1.0f];
@@ -385,14 +393,6 @@
         highScore = true;
         [[NSUserDefaults standardUserDefaults] setInteger:self.score forKey:@"HighScore"];
     }
-}
-
-- (void)explosionRecap {
-    [self goToRecap:@"You exploded!"];
-}
-
-- (void)marginRecap {
-    [self goToRecap:@"Out of margin!"];
 }
 
 @end

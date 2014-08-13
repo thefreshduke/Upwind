@@ -1349,7 +1349,7 @@
 						<string>Text</string>
 						<key>value</key>
 						<array>
-							<string>Hold to move</string>
+							<string></string>
 							<false/>
 						</array>
 					</dict>
@@ -1485,6 +1485,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -2525,8 +2527,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -3379,7 +3379,7 @@
 						<key>type</key>
 						<string>FontTTF</string>
 						<key>value</key>
-						<string>Helvetica</string>
+						<string>Fonts/Slackey.ttf</string>
 					</dict>
 					<dict>
 						<key>name</key>

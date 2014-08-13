@@ -10,7 +10,7 @@
 
 @interface Recap : CCNode
 
-- (void)setMessage:(NSString *)message level:(NSInteger)level score:(NSInteger)score;
+- (void)setScore: (NSInteger)score;
 - (void)updateHighScore;
 
 @end

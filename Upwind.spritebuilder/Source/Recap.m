@@ -25,9 +25,7 @@
     [[CCDirector sharedDirector] replaceScene:gameplayScene];
 }
 
-- (void)setMessage:(NSString *)message level:(NSInteger)level score:(NSInteger)score {
-    _deathLabel.string = message;
-    _levelLabel.string = [NSString stringWithFormat:@"%ld", (long)level];
+- (void)setScore:(NSInteger)score {
 //    if (!highScore) {
         _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)score];
 //    } //how to shift between standard "your score/best score" and "YOU GOT A HIGH SCORE"?
