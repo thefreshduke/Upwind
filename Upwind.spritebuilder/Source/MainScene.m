@@ -19,31 +19,32 @@
     CCButton *_playButton;
 }
 
-//- (void)play {
-//    [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
-//    CCScene *gameplayScene = [CCBReader loadAsScene:@"Gameplay"];
-//    [[CCDirector sharedDirector] replaceScene:gameplayScene];
-//}
-
-// how to make play button explode properly?
-
 - (void)play {
-    [self explode];
-}
-
-- (void)explode {
     [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
-    CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
-    playerExplosion.position = ccp(_playButton.position.x, _playButton.position.y); //?
-    [_playButton.parent addChild:playerExplosion];
-    float pause = 0.5;
-    [self scheduleOnce:@selector(goToGame) delay:pause];
-}
-
-- (void)goToGame {
+    self.userInteractionEnabled = false; // needed?
     CCScene *gameplayScene = [CCBReader loadAsScene:@"Gameplay"];
     [[CCDirector sharedDirector] replaceScene:gameplayScene];
 }
+
+// how to make play button explode properly?
+
+//- (void)play {
+//    [self explode];
+//}
+//
+//- (void)explode {
+//    [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/Explosion.caf"];
+//    CCSprite *playerExplosion = (CCSprite *)[CCBReader load:@"Explosion"];
+//    playerExplosion.position = ccp(_playButton.position.x, _playButton.position.y); //?
+//    [_playButton.parent addChild:playerExplosion];
+//    float pause = 0.5;
+//    [self scheduleOnce:@selector(goToGame) delay:pause];
+//}
+//
+//- (void)goToGame {
+//    CCScene *gameplayScene = [CCBReader loadAsScene:@"Gameplay"];
+//    [[CCDirector sharedDirector] replaceScene:gameplayScene];
+//}
 
 - (void)moreGames {
     [MGWU displayCrossPromo];

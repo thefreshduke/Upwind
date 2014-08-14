@@ -17,6 +17,8 @@
     Wall *_wall;
     CCPhysicsNode *_physicsNode;
     CCLabelTTF *_instructionLabel;
+    CCLabelTTF *_idiotLabel;
+    CCLabelTTF *_idiotInstructionLabel;
     CCLabelTTF *_obstacleLabel;
     CCLabelTTF *_infoLabel1;
     CCLabelTTF *_infoLabel2;
@@ -43,7 +45,6 @@
 }
 
 - (void)didLoadFromCCB {
-
     self.userInteractionEnabled = true;
     _physicsNode.collisionDelegate = self;
 //    _physicsNode.debugDraw = true;
@@ -126,12 +127,10 @@
             
             _score += _errorMargin * _level;
             _level++;
-            _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
-            _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
             
-            if (distance <= 10) {
-                [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"tutorialCompleted"];
-            }
+//            if (distance <= 10) {
+//                [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"tutorialCompleted"];
+//            }
             
             if (distance == 0) {
                 
@@ -174,19 +173,43 @@
                 _performanceLabel.string = [NSString stringWithFormat:@"OKAY"];
             }
             else {
-                _performanceLabel.string = [NSString stringWithFormat:@"GO TO THE WALL"];
-                //play X buzzer wrong on game show sound effect?
+                [[OALSimpleAudio sharedInstance] playEffect:@"Buzzer.caf"];
+                _performanceLabel.string = [NSString stringWithFormat:@"BAD"]; //don't say bad?
+                if (distance > 30) {
+                    if (_level < 3) {
+                        [_instructionLabel removeFromParent];
+                        _idiotLabel.string = [NSString stringWithFormat:@"GO TO THE WALL"];
+                        if (distance > 75) {
+                            _idiotInstructionLabel.string = [NSString stringWithFormat:@"Hold to move"];
+                            _level--;
+                            _score -= _errorMargin * _level;
+                            _errorMargin += distance;
+                            [self scheduleBlock:^(CCTimer *timer) {
+                                _idiotInstructionLabel.string = [NSString stringWithFormat:@"Release to stop"];
+                                [self scheduleBlock:^(CCTimer *timer) {
+                                    [_idiotInstructionLabel removeFromParent];
+                                } delay:1.f];
+                            } delay:1.f];
+                        }
+                    }
+                }
             }
+            
+//            NSLog(@"level: %ld", (long)_level);
+//            NSLog(@"score: %ld", (long)_score);
+//            NSLog(@"margin: %ld", (long)_errorMargin);
+//            NSLog(@"distance: %ld", (long)distance);
             
             [[self animationManager] runAnimationsForSequenceNamed:@"Default Timeline"];
             waiting = true;
             [self scheduleBlock:^(CCTimer *timer) {
                 waiting = false;
-            } delay:1.5f]; //maybe switch time?
+            } delay:1.f]; //maybe switch time?
             
+            NSNumber* distanceTraveled = [NSNumber numberWithInt: distance];
             NSNumber* margin = [NSNumber numberWithInt: self.errorMargin];
             NSNumber* ifPerfect = [NSNumber numberWithBool: perfect];
-            NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys: margin, @"errorMargin", ifPerfect, @"perfect", nil];
+            NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys: distanceTraveled, @"distance", margin, @"errorMargin", ifPerfect, @"perfect", nil];
             [MGWU logEvent:@"levelComplete" withParams:params];
             // syntax correct?
             
@@ -198,10 +221,15 @@
                 _wall.position = ccp(400, 17);
             }
             perfect = false;
+            
+            _scoreLabel.string = [NSString stringWithFormat:@"%ld", (long)_score];
+            _marginLabel.string = [NSString stringWithFormat:@"%ld", (long)_errorMargin];
         }
         else {
             self.userInteractionEnabled = false;
 //            [_instructionLabel removeFromParent];
+            [_idiotLabel removeFromParent];
+            [_idiotInstructionLabel removeFromParent];
             [_obstacleLabel removeFromParent];
             [_infoLabel1 removeFromParent];
             [_infoLabel2 removeFromParent];
@@ -224,7 +252,15 @@
 }
 
 -(void)update:(CCTime)delta {
-    if (_level > 4) {
+    if (_level < 5) {
+        oscillatingWall = false;
+        headWind = false;
+        closingWall = false;
+        backwardsConveyerBelt = false;
+        forwardsConveyerBelt = false;
+    }
+    else if (_level < 9) {
+        [_idiotLabel removeFromParent];
         oscillatingWall = true;
         headWind = false;
         closingWall = false;
@@ -232,7 +268,7 @@
         forwardsConveyerBelt = false;
         _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Oscillating Wall"];
     }
-    if (_level > 8) {
+    else if (_level < 13) {
         oscillatingWall = false;
         headWind = false;
         closingWall = true;
@@ -240,7 +276,7 @@
         forwardsConveyerBelt = false;
         _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Closing Wall"];
     }
-    if (_level > 12) {
+    else if (_level < 17) {
         oscillatingWall = false;
         headWind = true;
         closingWall = false;
@@ -248,7 +284,7 @@
         forwardsConveyerBelt = false;
         _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Head Wind"];
     }
-    if (_level > 16) {
+    else if (_level < 21) {
         oscillatingWall = false;
         headWind = false;
         closingWall = false;
@@ -256,7 +292,7 @@
         forwardsConveyerBelt = true;
         _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Forwards Conveyer Belt"];
     }
-    if (_level > 20) {
+    else if (_level < 25) {
         oscillatingWall = false;
         headWind = false;
         closingWall = false;
@@ -264,7 +300,7 @@
         forwardsConveyerBelt = false;
         _obstacleLabel.string = [NSString stringWithFormat:@"New Obstacle: Backwards Conveyer Belt"];
     }
-    if (_level > 24) {
+    else if (_level < 29) {
         oscillatingWall = true;
         headWind = false;
         closingWall = false;
@@ -272,21 +308,21 @@
         forwardsConveyerBelt = true;
         _obstacleLabel.string = [NSString stringWithFormat:@" "];
     }
-    if (_level > 28) {
+    else if (_level < 33) {
         oscillatingWall = false;
         headWind = false;
         closingWall = true;
         backwardsConveyerBelt = true;
         forwardsConveyerBelt = false;
     }
-    if (_level > 32) {
+    else if (_level < 37) {
         oscillatingWall = true;
         headWind = true;
         closingWall = false;
         backwardsConveyerBelt = false;
         forwardsConveyerBelt = false;
     }
-    if (_level > 36) {
+    else if (_level < 41) {
         oscillatingWall = false;
         headWind = false;
         closingWall = true;
@@ -304,30 +340,30 @@
             }
             _wall.position = ccp(_wall.position.x + _oscillatingWallSpeed, _wall.position.y);
         }
-//        if (headWind) { //works as intended, except it sometimes crashes??? needs visuals...
-//            long i = arc4random_uniform(20);
-//            if (_playerSpeed == 4) {
-//                [self scheduleBlock:^(CCTimer *timer) {
-//                    if (i < 15) {
-//                        _playerSpeed = 1;
-//                    }
-//                } delay:0.5f];
-//            }
-//            else {
-//                if (i == 19) {
-//                    _playerSpeed = 4;
-//                }
-//            }
-//        }
-        if (headWind) {
+        if (headWind) { //works as intended, except it sometimes crashes??? needs visuals...
             long i = arc4random_uniform(20);
-            if (i < 15) {
-                _playerSpeed = 1;
+            if (_playerSpeed == 4) {
+                [self scheduleBlock:^(CCTimer *timer) {
+                    if (i < 15) {
+                        _playerSpeed = 1;
+                    }
+                } delay:0.5f];
             }
-            if (i == 19) {
-                _playerSpeed = 4;
+            else {
+                if (i == 19) {
+                    _playerSpeed = 4;
+                }
             }
         }
+//        if (headWind) {
+//            long i = arc4random_uniform(20);
+//            if (i < 15) {
+//                _playerSpeed = 1;
+//            }
+//            if (i == 19) {
+//                _playerSpeed = 4;
+//            }
+//        }
         
         if (closingWall) {
             _wall.position = ccp(_wall.position.x - 2, _wall.position.y);
@@ -349,6 +385,8 @@
     collision = true;
     self.userInteractionEnabled = false;
     //    [_instructionLabel removeFromParent];
+    [_idiotLabel removeFromParent];
+    [_idiotInstructionLabel removeFromParent];
     [_obstacleLabel removeFromParent];
     [_infoLabel1 removeFromParent];
     [_infoLabel2 removeFromParent];
