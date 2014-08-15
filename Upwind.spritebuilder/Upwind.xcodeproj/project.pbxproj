@@ -87,6 +87,8 @@
 		6F10855A1996A18300CF5E76 /* send-button-instate.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F1085141996A18300CF5E76 /* send-button-instate.png */; };
 		6F10855B1996A18300CF5E76 /* send-field-landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F1085151996A18300CF5E76 /* send-field-landscape.png */; };
 		6F346D0319950C5600ADEDE4 /* Explosion.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F346D0219950C5600ADEDE4 /* Explosion.m */; };
+		6F939322199C3D2000850342 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F939321199C3D2000850342 /* Icon.png */; };
+		6F939325199C3D5200850342 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F939324199C3D5200850342 /* Images.xcassets */; };
 		6F9D089A198C112300817BD1 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D0899198C112300817BD1 /* Player.m */; };
 		6F9D089E198C112E00817BD1 /* Wall.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D089D198C112E00817BD1 /* Wall.m */; };
 		6FA3D708199BA89E003FAA38 /* Buzzer.caf in Resources */ = {isa = PBXBuildFile; fileRef = 6FA3D707199BA89E003FAA38 /* Buzzer.caf */; };
@@ -223,6 +225,8 @@
 		6F1085151996A18300CF5E76 /* send-field-landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-field-landscape.png"; sourceTree = "<group>"; };
 		6F346D0119950C5600ADEDE4 /* Explosion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Explosion.h; path = Source/Explosion.h; sourceTree = "<group>"; };
 		6F346D0219950C5600ADEDE4 /* Explosion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Explosion.m; path = Source/Explosion.m; sourceTree = "<group>"; };
+		6F939321199C3D2000850342 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		6F939324199C3D5200850342 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Upwind/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		6F9D0898198C112300817BD1 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Source/Player.h; sourceTree = "<group>"; };
 		6F9D0899198C112300817BD1 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Source/Player.m; sourceTree = "<group>"; };
 		6F9D089C198C112E00817BD1 /* Wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wall.h; path = Source/Wall.h; sourceTree = "<group>"; };
@@ -441,6 +445,7 @@
 			isa = PBXGroup;
 			children = (
 				6FA3D70A199BF3C5003FAA38 /* Default.png */,
+				6F939321199C3D2000850342 /* Icon.png */,
 				6FA3D707199BA89E003FAA38 /* Buzzer.caf */,
 				6F0C98AF198C9F0D006EC450 /* Sounds */,
 				B737893C1807616C0076A88C /* Source */,
@@ -488,6 +493,7 @@
 		B77F1B4617B978D7009739AE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6F939324199C3D5200850342 /* Images.xcassets */,
 				B73789911807667A0076A88C /* Icons */,
 				B737893A180761570076A88C /* Published-iOS */,
 			);
@@ -617,6 +623,7 @@
 				6F1085411996A18300CF5E76 /* MGWUBackgroundDark-Landscape~ipad.png in Resources */,
 				6F1085591996A18300CF5E76 /* send-button-inactive.png in Resources */,
 				6F10854A1996A18300CF5E76 /* MGWUFacebookLoginLandscapeDark.nib in Resources */,
+				6F939325199C3D5200850342 /* Images.xcassets in Resources */,
 				6F1085211996A18300CF5E76 /* FBNoThanksButton@2x.png in Resources */,
 				6F1085541996A18300CF5E76 /* mgwuPlaceholderIconDark@2x.png in Resources */,
 				B737893B180761570076A88C /* Published-iOS in Resources */,
@@ -635,6 +642,7 @@
 				6F1085391996A18300CF5E76 /* MGWUBackground-Landscape~ipad.png in Resources */,
 				6F1085301996A18300CF5E76 /* MGWUAboutFooter-Landscape@2x~iphone.png in Resources */,
 				6F1085201996A18300CF5E76 /* FBNoThanksButton.png in Resources */,
+				6F939322199C3D2000850342 /* Icon.png in Resources */,
 				6F1085271996A18300CF5E76 /* hipmob.send.png in Resources */,
 				6F1085471996A18300CF5E76 /* MGWUClose.png in Resources */,
 				6F1085571996A18300CF5E76 /* operator.unavailable.png in Resources */,
@@ -784,6 +792,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -821,6 +831,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

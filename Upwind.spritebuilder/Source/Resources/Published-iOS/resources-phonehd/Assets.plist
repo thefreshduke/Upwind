@@ -56,6 +56,19 @@
 			<key>sourceSize</key>
 			<string>{142, 142}</string>
 		</dict>
+		<key>Assets/target.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{1990, 1}, {40, 40}}</string>
+			<key>offset</key>
+			<string>{0, 0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0, 0}, {40, 40}}</string>
+			<key>sourceSize</key>
+			<string>{40, 40}</string>
+		</dict>
 	</dict>
 	<key>metadata</key>
 	<dict>
